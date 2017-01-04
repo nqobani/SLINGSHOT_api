@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlingshotAPI", "SlingshotAPI\SlingshotAPI.csproj", "{ECBB7FD1-A9AD-4B72-8D3C-4AB3431254CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlingshotAPI.ApplicationLogicLayer", "SlingshotAPI.ApplicationLogicLayer\SlingshotAPI.ApplicationLogicLayer.csproj", "{7EF55267-A74B-489A-8056-8772D11362BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlingshotAPI.Common", "SlingshotAPI.Common\SlingshotAPI.Common.csproj", "{67C17F16-2AAF-4FD2-B9F1-BA2C62B09B05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlingshotAPI.Data", "SlingshotAPI.Data\SlingshotAPI.Data.csproj", "{7C3DEBEC-6734-4E15-B897-B8FFABBE7F39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECBB7FD1-A9AD-4B72-8D3C-4AB3431254CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECBB7FD1-A9AD-4B72-8D3C-4AB3431254CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECBB7FD1-A9AD-4B72-8D3C-4AB3431254CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECBB7FD1-A9AD-4B72-8D3C-4AB3431254CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EF55267-A74B-489A-8056-8772D11362BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF55267-A74B-489A-8056-8772D11362BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EF55267-A74B-489A-8056-8772D11362BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EF55267-A74B-489A-8056-8772D11362BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C17F16-2AAF-4FD2-B9F1-BA2C62B09B05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C17F16-2AAF-4FD2-B9F1-BA2C62B09B05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C17F16-2AAF-4FD2-B9F1-BA2C62B09B05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C17F16-2AAF-4FD2-B9F1-BA2C62B09B05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C3DEBEC-6734-4E15-B897-B8FFABBE7F39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C3DEBEC-6734-4E15-B897-B8FFABBE7F39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C3DEBEC-6734-4E15-B897-B8FFABBE7F39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C3DEBEC-6734-4E15-B897-B8FFABBE7F39}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
