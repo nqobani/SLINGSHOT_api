@@ -32,8 +32,13 @@ namespace SlingshotAPI.Controllers
             }
 
         }
+        [Route("send")]
+        public  HistoryModel sendCampaigns(int userId=388, int campId=31, string toEmail="nqobani.zulu15@gmail.com")
+        {
+            return obj.sendCampaign(userId, campId, toEmail);
+        }
         [Route("add")]
-        public Task<CompleteCampaign> addCampaign(int creatorId, string campaignName = "No Name", string thumbnail = "HTTPS", string subject = "TESTIING", string HTML = "<!DOCTYPE html>", string fileName = "jack.png", string file = @"dfjhkd\dgjh\dfjhghs\jack.png", string status = "public")
+        public CompleteCampaign addCampaign(int creatorId, string campaignName = "No Name", string thumbnail = "HTTPS", string subject = "TESTIING", string HTML = "<!DOCTYPE html>", string fileName = "jack.png", string file = @"dfjhkd\dgjh\dfjhghs\jack.png", string status = "public")
         {
             UserService obj = new UserService();
 
@@ -45,14 +50,6 @@ namespace SlingshotAPI.Controllers
             UserService obj = new UserService();
             return obj.getCampaigns(name);
         }
-
-        [Route("send")]
-        public void sendCampaign()
-        {
-
-        }
-
-        
         [Route("uploadImage")]
         public void uploadImage()
         {

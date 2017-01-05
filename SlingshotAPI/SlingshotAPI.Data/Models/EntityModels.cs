@@ -102,4 +102,10 @@ namespace SlingshotAPI.Data.Models
         public DateTime sentDateTime { set; get; }
         public string toMail { set; get; }
     }
+    public class UserCampaign
+    {
+        public int userId { set; get; }
+        public int campaignId { set; get; }
+    }
+
 }

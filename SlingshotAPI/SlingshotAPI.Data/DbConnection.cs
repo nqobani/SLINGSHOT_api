@@ -57,6 +57,16 @@ namespace SlingshotAPI.Data
             }
            
         }
+        public string GetUserEmail(int userId)
+        {
+            var user = (from u in con.tblUsers
+                        where u.Id == userId
+                        select new UserModel
+                        {
+                            email=u.email
+                        }).FirstOrDefault();
+            return user.email;
+        }
 
         public VCardModel CreateVCard(int userId, string firstName, string lastName, string company, string jobTitle, string email, string webPageAddress, string twitter, string businessPhoneNumber, string mobilePhone, string country, string city, string cityCode, string imageLink)
         {
@@ -127,17 +137,13 @@ namespace SlingshotAPI.Data
                          }).FirstOrDefault();
             return vCard;
         }
-
-
-
-
-
-
-
-
-
-
-
+        public IEnumerable<VCardModel> GetUserVCards(int userId)
+        {
+            var vCards = (from vc in con.tblVCards
+                          where vc.userID == userId
+                          select new VCardModel { }).ToList();
+            return vCards;
+        }
 
 
 
@@ -209,13 +215,43 @@ namespace SlingshotAPI.Data
                                      }).FirstOrDefault();
             return newAttechmentData;
         }
-        public IEnumerable<HistoryModel> createHistory(int userId, int campaignId, string toEMail, int imageId=0)
+
+
+        public IEnumerable<CampaingModel> getAllCampaigns(string campName)
+        {
+            var campaigns = (from c in con.tblCampaigns
+                             where c.name.Contains(campName)
+                             select new CampaingModel
+                             {
+                                 id = c.Id,
+                                 name = c.name,
+                                 thumbnails = c.thumbnail,
+                                 status = c.status
+                             }).ToList();
+            return campaigns;
+        }
+        public EmailModel GetEmail(int capmId)
+        {
+            var email = (from e in con.tblEmails
+                         where e.campaignId == capmId
+                         select new EmailModel {
+                             id = e.Id,
+                             campaignId = e.campaignId,
+                             subject = e.subject,
+                             html = e.html
+                         }).FirstOrDefault();
+            return email;
+        }
+
+
+        public HistoryModel createHistory(int userId, int campaignId, string toEMail, int imageId=0)
         {
             tblHistory newHistory = new tblHistory();
             newHistory.userId = userId;
             newHistory.imageId = imageId;
             newHistory.campaignId = campaignId;
             newHistory.toEMail = toEMail;
+            newHistory.sentDateTime = DateTime.Now;
             con.tblHistories.InsertOnSubmit(newHistory);
             con.SubmitChanges();
             int histID = newHistory.Id;
@@ -229,24 +265,10 @@ namespace SlingshotAPI.Data
                                       campaignId=h.campaignId,
                                       sentDateTime=Convert.ToDateTime(h.sentDateTime),
                                       toMail=h.toEMail
-                                  }).ToList();
+                                  }).FirstOrDefault();
             return newHistoryData;
         }
 
-
-
-        public IEnumerable<CampaingModel> getAllCampaigns(string campName)
-        {
-            var campaigns = (from c in con.tblCampaigns
-                             where c.name.Contains(campName)
-                            select new CampaingModel
-                            {
-                                id=c.Id,
-                                name=c.name,
-                                thumbnails=c.thumbnail,
-                                status=c.status
-                            }).ToList();
-            return campaigns;
-        }
+        
     }
 }
