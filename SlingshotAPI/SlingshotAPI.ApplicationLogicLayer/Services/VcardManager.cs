@@ -69,7 +69,7 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
             vCardBuilder.AppendLine(vCard.Country);
             vCardBuilder.AppendLine("ORG:" + vCard.Company);
             vCardBuilder.AppendLine("TITLE:" + vCard.JobTitle);
-            vCardBuilder.AppendLine("TEL;HOME;VOICE:" + vCard.Phone);
+            vCardBuilder.AppendLine("TEL;WORK;VOICE:" + vCard.Phone);
             vCardBuilder.AppendLine("TEL;CELL;VOICE:" + vCard.Mobile);
             vCardBuilder.AppendLine("EMAIL;PREF;INTERNET:" + vCard.Email);
 

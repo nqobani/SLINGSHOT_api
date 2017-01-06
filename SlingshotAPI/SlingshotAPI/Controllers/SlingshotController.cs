@@ -15,25 +15,11 @@ using System.Net.Mime;
 namespace SlingshotAPI.Controllers
 {
     [RoutePrefix("api/campaign")]
-    public class SlingshotController : ApiController
+    public class CampaignController : ApiController
     {
         UserService obj = new UserService();
-        [Route("registerUser")]
-        public UserModel register(string email, string password)
-        {
-
-            try
-            {
-                return obj.createUser(email, password);
-            }
-            catch (ErrorMessage c)
-            {
-                throw c;
-            }
-
-        }
         [Route("send")]
-        public  HistoryModel sendCampaigns(int userId=388, int campId=31, string toEmail="nqobani.zulu15@gmail.com")
+        public HistoryModel sendCampaigns(int userId, int campId, string toEmail)
         {
             return obj.sendCampaign(userId, campId, toEmail);
         }
@@ -45,10 +31,10 @@ namespace SlingshotAPI.Controllers
             return obj.createCampaign(creatorId, campaignName, thumbnail, subject, HTML, fileName, file, status);
         }
         [Route("get")]
-        public IEnumerable<CampaingModel> getCampaigns(string name = "public")
+        public IEnumerable<CampaingModel> getCampaigns(int userId, string name = "")
         {
             UserService obj = new UserService();
-            return obj.getCampaigns(name);
+            return obj.getCampaigns(userId, name);
         }
         [Route("uploadImage")]
         public void uploadImage()

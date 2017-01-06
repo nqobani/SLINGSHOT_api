@@ -13,10 +13,20 @@ namespace SlingshotAPI.Controllers
     public class UserController : ApiController
     {
         UserService obj = new UserService();
-        [Route("get")]
-        public string test()
+
+        [Route("registerUser")]
+        public UserModel register(string email, string password)
         {
-            return "this is just for testing";
+
+            try
+            {
+                return obj.createUser(email, password);
+            }
+            catch (ErrorMessage c)
+            {
+                throw c;
+            }
+
         }
 
         [Route("getvcards")]

@@ -9,7 +9,7 @@ using SlingshotAPI.Data.Models;
 
 namespace SlingshotAPI.Data
 {
-    
+
 
     public class DbConnection
     {
@@ -19,19 +19,20 @@ namespace SlingshotAPI.Data
         public UserModel createUser(string email, string password)
         {
             var userC = (from user in con.tblUsers
-                                    where user.email == email
-                                    select new UserModel
-                                    {
-                                        id = user.Id,
-                                       email = user.email,
-                                       password=user.password
-                                   }).ToList();
+                         where user.email == email
+                         select new UserModel
+                         {
+                             id = user.Id,
+                             email = user.email,
+                             password = user.password
+                         }).ToList();
 
-            if (userC.Count>0)
+            if (userC.Count > 0)
             {
-                throw new ErrorMessage {
-                    message="Registration Failed",
-                    course="User with the same email addres already exists"
+                throw new ErrorMessage
+                {
+                    message = "Registration Failed",
+                    course = "User with the same email addres already exists"
                 };
                 //User with the same email address already exist, try another one or sign in
             }
@@ -46,16 +47,16 @@ namespace SlingshotAPI.Data
                 int ids = newUser.Id;
 
                 var newUsers = (from user in con.tblUsers
-                             where user.Id == ids
+                                where user.Id == ids
                                 select new UserModel
-                             {
-                                 id = user.Id,
-                                 email = user.email,
-                                 password = user.password
-                             }).FirstOrDefault();
+                                {
+                                    id = user.Id,
+                                    email = user.email,
+                                    password = user.password
+                                }).FirstOrDefault();
                 return newUsers;
             }
-           
+
         }
         public string GetUserEmail(int userId)
         {
@@ -63,7 +64,7 @@ namespace SlingshotAPI.Data
                         where u.Id == userId
                         select new UserModel
                         {
-                            email=u.email
+                            email = u.email
                         }).FirstOrDefault();
             return user.email;
         }
@@ -92,25 +93,25 @@ namespace SlingshotAPI.Data
             int vCardId = newVCard.Id;
 
             var vCard = (from v in con.tblVCards
-                        where v.Id == vCardId
-                        select new VCardModel
-                        {
-                            id = v.Id,
-                            UserId = v.userID,
-                            firstName = v.firstName,
-                            lastName = v.lastName,
-                            company = v.company,
-                            jobTitle = v.jobTitle,
-                            fileAs = v.fileAs,
-                            email = v.email,
-                            webPageAddress = v.webPageAddress,
-                            twitter = v.twitter,
-                            businessPhoneNumber = v.businessPhoneNumber,
-                            mobilePhoneNumber = v.mobileNumber,
-                            country = v.country,
-                            code = v.code,
-                            profilePicturePath = v.profileImage
-                        }).FirstOrDefault();
+                         where v.Id == vCardId
+                         select new VCardModel
+                         {
+                             id = v.Id,
+                             UserId = v.userID,
+                             firstName = v.firstName,
+                             lastName = v.lastName,
+                             company = v.company,
+                             jobTitle = v.jobTitle,
+                             fileAs = v.fileAs,
+                             email = v.email,
+                             webPageAddress = v.webPageAddress,
+                             twitter = v.twitter,
+                             businessPhoneNumber = v.businessPhoneNumber,
+                             mobilePhoneNumber = v.mobileNumber,
+                             country = v.country,
+                             code = v.code,
+                             profilePicturePath = v.profileImage
+                         }).FirstOrDefault();
             return vCard;
         }
         public VCardModel GetVCard(int vCardId)
@@ -141,14 +142,41 @@ namespace SlingshotAPI.Data
         {
             var vCards = (from vc in con.tblVCards
                           where vc.userID == userId
-                          select new VCardModel { }).ToList();
+                          select new VCardModel
+                          {
+                              id = vc.Id,
+                              UserId = vc.userID,
+                              profilePicturePath = vc.profileImage,
+                              firstName = vc.firstName,
+                              lastName = vc.lastName,
+                              company = vc.company,
+                              jobTitle = vc.jobTitle,
+                              fileAs = vc.fileAs,
+                              email = vc.email,
+                              twitter = vc.twitter,
+                              webPageAddress = vc.webPageAddress,
+                              businessPhoneNumber = vc.businessPhoneNumber,
+                              mobilePhoneNumber = vc.mobileNumber,
+                              country = vc.country,
+                              city = vc.city,
+                              code = vc.code
+                          }).ToList();
             return vCards;
         }
 
+        public void userCampaign(int userId, int campaignId)
+        {
+            tblUserCampaign uc = new tblUserCampaign();
+
+            uc.userId = userId;
+            uc.campaignId = campaignId;
+
+            con.tblUserCampaigns.InsertOnSubmit(uc);
+            con.SubmitChanges();
+        }
 
 
-
-        public CampaingModel createCampain(int creatorId, string name,string thumbnail,string status="public")
+        public CampaingModel createCampain(int creatorId, string name, string thumbnail, string status = "public")
         {
             tblCampaign newCampaign = new tblCampaign();
             newCampaign.creatorId = creatorId;
@@ -161,18 +189,18 @@ namespace SlingshotAPI.Data
             int campaignId = newCampaign.Id;
 
             var newCampaignData = (from c in con.tblCampaigns
-                                  where c.Id == campaignId
-                                  select new CampaingModel
-                                  {
-                                      id = c.Id,
-                                      name = c.name,
-                                      status = c.status,
-                                      thumbnails = c.thumbnail
-                                  }).FirstOrDefault();
+                                   where c.Id == campaignId
+                                   select new CampaingModel
+                                   {
+                                       id = c.Id,
+                                       name = c.name,
+                                       status = c.status,
+                                       thumbnails = c.thumbnail
+                                   }).FirstOrDefault();
 
             return newCampaignData;
         }
-        public EmailModel createEmail(int campaignId, string subject,string HTML)
+        public EmailModel createEmail(int campaignId, string subject, string HTML)
         {
             tblEmail newEmail = new tblEmail();
             newEmail.campaignId = campaignId;
@@ -184,14 +212,14 @@ namespace SlingshotAPI.Data
             int emailId = newEmail.Id;
 
             var newEmailData = (from e in con.tblEmails
-                               where e.Id == emailId
-                               select new EmailModel
-                               {
-                                   id=e.Id,
-                                   campaignId=e.campaignId,
-                                   subject=e.subject,
-                                   html=e.html
-                               }).FirstOrDefault();
+                                where e.Id == emailId
+                                select new EmailModel
+                                {
+                                    id = e.Id,
+                                    campaignId = e.campaignId,
+                                    subject = e.subject,
+                                    html = e.html
+                                }).FirstOrDefault();
             return newEmailData;
         }
         public AttechmentsModel createAttecment(int emailId, string name, string file/*Path*/)
@@ -217,9 +245,9 @@ namespace SlingshotAPI.Data
         }
 
 
-        public IEnumerable<CampaingModel> getAllCampaigns(string campName)
+        public IEnumerable<CampaingModel> getAllCampaigns(int userId, string campName)
         {
-            var campaigns = (from c in con.tblCampaigns
+            var campaigns = (from c in con.vUserCampaigns
                              where c.name.Contains(campName)
                              select new CampaingModel
                              {
@@ -234,7 +262,8 @@ namespace SlingshotAPI.Data
         {
             var email = (from e in con.tblEmails
                          where e.campaignId == capmId
-                         select new EmailModel {
+                         select new EmailModel
+                         {
                              id = e.Id,
                              campaignId = e.campaignId,
                              subject = e.subject,
@@ -244,7 +273,7 @@ namespace SlingshotAPI.Data
         }
 
 
-        public HistoryModel createHistory(int userId, int campaignId, string toEMail, int imageId=0)
+        public HistoryModel createHistory(int userId, int campaignId, string toEMail, int imageId = 0)
         {
             tblHistory newHistory = new tblHistory();
             newHistory.userId = userId;
@@ -260,15 +289,15 @@ namespace SlingshotAPI.Data
                                   where h.Id == histID
                                   select new HistoryModel
                                   {
-                                      id=h.Id,
-                                      userId=h.userId,
-                                      campaignId=h.campaignId,
-                                      sentDateTime=Convert.ToDateTime(h.sentDateTime),
-                                      toMail=h.toEMail
+                                      id = h.Id,
+                                      userId = h.userId,
+                                      campaignId = h.campaignId,
+                                      sentDateTime = Convert.ToDateTime(h.sentDateTime),
+                                      toMail = h.toEMail
                                   }).FirstOrDefault();
             return newHistoryData;
         }
 
-        
+
     }
 }

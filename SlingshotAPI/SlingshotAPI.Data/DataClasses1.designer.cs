@@ -179,6 +179,14 @@ namespace SlingshotAPI.Data
 				return this.GetTable<tblCampaign>();
 			}
 		}
+		
+		public System.Data.Linq.Table<vUserCampaign> vUserCampaigns
+		{
+			get
+			{
+				return this.GetTable<vUserCampaign>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tblAttachment")]
@@ -2210,6 +2218,105 @@ namespace SlingshotAPI.Data
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.vUserCampaign")]
+	public partial class vUserCampaign
+	{
+		
+		private int _userId;
+		
+		private int _Id;
+		
+		private string _name;
+		
+		private string _status;
+		
+		private string _thumbnail;
+		
+		public vUserCampaign()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_userId", DbType="Int NOT NULL")]
+		public int userId
+		{
+			get
+			{
+				return this._userId;
+			}
+			set
+			{
+				if ((this._userId != value))
+				{
+					this._userId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL")]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this._Id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(50)")]
+		public string name
+		{
+			get
+			{
+				return this._name;
+			}
+			set
+			{
+				if ((this._name != value))
+				{
+					this._name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="NVarChar(50)")]
+		public string status
+		{
+			get
+			{
+				return this._status;
+			}
+			set
+			{
+				if ((this._status != value))
+				{
+					this._status = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_thumbnail", DbType="NVarChar(MAX)")]
+		public string thumbnail
+		{
+			get
+			{
+				return this._thumbnail;
+			}
+			set
+			{
+				if ((this._thumbnail != value))
+				{
+					this._thumbnail = value;
+				}
 			}
 		}
 	}

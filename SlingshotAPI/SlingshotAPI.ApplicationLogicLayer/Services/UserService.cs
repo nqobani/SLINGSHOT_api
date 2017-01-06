@@ -35,9 +35,9 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
         public IEnumerable<VCardModel> GetUserVCards(int userID)
         {
             VCardModel[] _vCardModel= new VCardModel[1];
-            if (/*_validationHandler.UserExist(userID)*/true)
+            if (_validationHandler.UserExist(userID))
             {
-                return GetUserVCards(userID);
+                return dbCon.GetUserVCards(userID);
             }
             else
             {
@@ -54,9 +54,13 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
 
             int campID = campaign.id;
 
+            dbCon.userCampaign(creatorId, campID);
+
             var email = dbCon.createEmail(campID, subject, HTML);
             int eID = email.id;
             var attechments = dbCon.createAttecment(eID, fileName, file);
+
+
             return new CompleteCampaign
             {
                 campiagn = campaign,
@@ -77,7 +81,7 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
                 string subject = email.subject;
                 string html = email.html;
 
-                SendEmail(fromEmail, toEmail, subject, 11, "<!DOCTYPE html><html><body><h1>and easy to do anywhere, even with C#<img src='https://s-media-cache-ak0.pinimg.com/originals/6a/0b/b7/6a0bb733cbbbf05cbe53d024e09e8816.jpg' </h1></body></html>").Wait();
+                SendEmail(fromEmail, toEmail, subject, 13, "<!DOCTYPE html><html><body><h1>and easy to do anywhere, even with C#<img src='https://s-media-cache-ak0.pinimg.com/originals/6a/0b/b7/6a0bb733cbbbf05cbe53d024e09e8816.jpg' </h1></body></html>").Wait();
                 return dbCon.createHistory(userId, campId, toEmail, 0);
             }
             else
@@ -85,9 +89,9 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
                 return new HistoryModel { };
             }
         }
-        public IEnumerable<CampaingModel> getCampaigns(string campName)
+        public IEnumerable<CampaingModel> getCampaigns(int userId,string campName)
         {
-            return dbCon.getAllCampaigns(campName);
+            return dbCon.getAllCampaigns(userId, campName);
         }
         public async Task SendEmail(string fromEmail, string toEmail, string subj, int vCardId,string HTML)
         {
