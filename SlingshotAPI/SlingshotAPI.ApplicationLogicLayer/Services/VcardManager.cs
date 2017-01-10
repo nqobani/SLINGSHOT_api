@@ -30,30 +30,42 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
         public static void GenearateVCard(VCard vCard)
         {
            // var t = HostingEnvironment.MapPath("~\\Services\\vCard\\vCard.vcf");
-            using (var vCardFile = File.OpenWrite(@"C:\Users\User\Music\images\vCard.vcf"))
+            using (var vCardFile = File.OpenWrite(Path.Combine(Directory.GetCurrentDirectory() + @"\vCard", "vCard.vcf")))
             using (var swWriter = new StreamWriter(vCardFile))
             {
                 swWriter.Write(BuildVCard(vCard));
             }
         }
-        public static void LoadVCardData(VCardModel vCardM)
+        public static Boolean LoadVCardData(VCardModel vCardM)
         {
-            var vcMyCard = new VCard
-            {
-                FName = vCardM.firstName,
-                LName = vCardM.lastName,
-                Company = vCardM.company,
-                JobTitle = vCardM.jobTitle,
-                Address = vCardM.webPageAddress,
-                City = vCardM.city,
-                Country = vCardM.country,
-                Phone = vCardM.businessPhoneNumber,
-                Mobile = vCardM.mobilePhoneNumber,
-                Email = vCardM.email,
-                ImageLink = vCardM.profilePicturePath
-            };
 
-            GenearateVCard(vcMyCard);
+            Boolean found = false;
+            if (vCardM != null)
+            {
+
+                found = true;
+                var vcMyCard = new VCard
+                {
+                    FName = vCardM.firstName,
+                    LName = vCardM.lastName,
+                    Company = vCardM.company,
+                    JobTitle = vCardM.jobTitle,
+                    Address = vCardM.webPageAddress,
+                    City = vCardM.city,
+                    Country = vCardM.country,
+                    Phone = vCardM.businessPhoneNumber,
+                    Mobile = vCardM.mobilePhoneNumber,
+                    Email = vCardM.email,
+                    ImageLink = vCardM.profilePicturePath
+                };
+
+                GenearateVCard(vcMyCard);
+                return found;
+            }
+            else
+            {
+                return found;
+            }
         }
         public static string BuildVCard(VCard vCard)
         {

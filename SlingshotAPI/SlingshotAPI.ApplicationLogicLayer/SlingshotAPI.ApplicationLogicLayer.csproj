@@ -68,6 +68,9 @@
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Services\attachments\" />
+    <Folder Include="Services\images\" />
+    <Folder Include="Services\thumbnails\" />
     <Folder Include="Services\vCard\" />
   </ItemGroup>
   <ItemGroup>

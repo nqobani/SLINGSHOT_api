@@ -3,6 +3,7 @@ using SlingshotAPI.Data;
 using SlingshotAPI.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,7 +50,8 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
         }
         public Attechment GetAttechmentData(string filePath)
         {
-            byte[] imageArray = System.IO.File.ReadAllBytes(@"C:\Users\User\Music\images\vCard.vcf");
+
+            byte[] imageArray = System.IO.File.ReadAllBytes(filePath);
             string base64ImageRepresentation = Convert.ToBase64String(imageArray);
             string fileName= filePath.Substring(filePath.LastIndexOf('\\') + 1);
             string type = filePath.Substring(filePath.LastIndexOf('.') + 1);
@@ -62,7 +64,48 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
                 Content = base64ImageRepresentation
             };
         }
-    }
 
-    
+
+        public string GetUserType(int userId, int campaignId)
+        {
+            string userType;
+
+            var user = (from u in con.tblUsers
+                       where u.Id == userId
+                       select new UserModel {
+                           type=u.type
+                       }).FirstOrDefault();
+            userType = user.type;
+            return userType;
+        }
+        public Boolean IsCreator(int userId, int campaignId)
+        {
+            Boolean isCreator = false;
+            var camp = (from c in con.tblCampaigns
+                        where c.creatorId == userId && c.Id == campaignId
+                        select new CampaingModel {
+                            creatorId=c.creatorId,
+                            id=c.Id
+                        }).FirstOrDefault();
+            if(camp.id==campaignId && camp.creatorId==userId)
+            {
+                isCreator = true;
+            }
+            return isCreator;
+        }
+        public Boolean CanUserShare(int userId, int campaignId)
+        {
+            Boolean share = false;
+            string userType = GetUserType(userId, campaignId);
+            if(userType.ToLower().Equals("admin"))
+            {
+                share = true;
+            }
+            else
+            {
+                share = IsCreator(userId, campaignId);
+            }
+            return share;
+        }
+    }
 }

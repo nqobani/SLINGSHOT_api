@@ -16,13 +16,14 @@ namespace SlingshotAPI.Data.Models
         public int id { set; get; }
         public string email { set; get; }
         public string password { set; get; }
+        public string type { set; get; }
     }
 
     public class CompleteCampaign
     {
         public CampaingModel campiagn { get; set; }
         public EmailModel email { get; set; }
-        public AttechmentsModel attechment { get; set; }
+        public IEnumerable<AttachmentsModel> attechment { get; set; }
     }
 
     public class CampaingModel
@@ -31,6 +32,7 @@ namespace SlingshotAPI.Data.Models
         public string name { set; get; }
         public string thumbnails { set; get; }
         public string status { set; get; }
+        public int creatorId { set; get; }
     }
     public class EmailModel
     {
@@ -39,13 +41,19 @@ namespace SlingshotAPI.Data.Models
         public string subject { set; get; }
         public string html { get; set; }
     }
-    public class AttechmentsModel
+    public class AttachmentsModel
     {
         public int id { set; get; }
         public int emailId { set; get; }
         public string name { get; set; }
         public string file { get; set; }
     }
+    public class AttachmentUserLevelModel
+    {
+        public string name { get; set; }
+        public string filePath { get; set; }
+    }
+
 
     public class VCardModel
     {

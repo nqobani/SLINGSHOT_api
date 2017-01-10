@@ -15,12 +15,12 @@ namespace SlingshotAPI.Controllers
         UserService obj = new UserService();
 
         [Route("registerUser")]
-        public UserModel register(string email, string password)
+        public UserModel register(string email, string password, string type="member")
         {
 
             try
             {
-                return obj.createUser(email, password);
+                return obj.createUser(email, password, type);
             }
             catch (ErrorMessage c)
             {

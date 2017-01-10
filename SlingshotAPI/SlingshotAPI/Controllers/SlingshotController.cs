@@ -19,22 +19,26 @@ namespace SlingshotAPI.Controllers
     {
         UserService obj = new UserService();
         [Route("send")]
-        public HistoryModel sendCampaigns(int userId, int campId, string toEmail)
+        public HistoryModel sendCampaigns(int userId, int vcardId, int campId, string toEmail)
         {
-            return obj.sendCampaign(userId, campId, toEmail);
+            return obj.sendCampaign(userId,vcardId, campId, toEmail);
         }
         [Route("add")]
-        public CompleteCampaign addCampaign(int creatorId, string campaignName = "No Name", string thumbnail = "HTTPS", string subject = "TESTIING", string HTML = "<!DOCTYPE html>", string fileName = "jack.png", string file = @"dfjhkd\dgjh\dfjhghs\jack.png", string status = "public")
+        public CompleteCampaign addCampaign(int creatorId, string attechmentsJSONString, string campaignName = "No Name", string thumbnail = "HTTPS", string subject = "TESTIING", string HTML = "<!DOCTYPE html>",  string status = "public")
         {
             UserService obj = new UserService();
-
-            return obj.createCampaign(creatorId, campaignName, thumbnail, subject, HTML, fileName, file, status);
+            return obj.createCampaign(creatorId, campaignName, thumbnail, subject, HTML, attechmentsJSONString, status);
         }
         [Route("get")]
         public IEnumerable<CampaingModel> getCampaigns(int userId, string name = "")
         {
             UserService obj = new UserService();
             return obj.getCampaigns(userId, name);
+        }
+        [Route("share")]
+        public Boolean shareCampaign(int userId, int campaignId)
+        {
+            return obj.ShareCampaigns(userId, campaignId);
         }
         [Route("uploadImage")]
         public void uploadImage()

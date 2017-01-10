@@ -16,7 +16,7 @@ namespace SlingshotAPI.Data
         private DataClasses1DataContext con = new DataClasses1DataContext();
 
 
-        public UserModel createUser(string email, string password)
+        public UserModel createUser(string email, string password, string type)
         {
             var userC = (from user in con.tblUsers
                          where user.email == email
@@ -41,6 +41,7 @@ namespace SlingshotAPI.Data
                 tblUser newUser = new tblUser();
                 newUser.email = email;
                 newUser.password = password;
+                newUser.type = type;
 
                 con.tblUsers.InsertOnSubmit(newUser);
                 con.SubmitChanges();
@@ -52,7 +53,8 @@ namespace SlingshotAPI.Data
                                 {
                                     id = user.Id,
                                     email = user.email,
-                                    password = user.password
+                                    password = user.password,
+                                    type=user.type
                                 }).FirstOrDefault();
                 return newUsers;
             }
@@ -136,6 +138,10 @@ namespace SlingshotAPI.Data
                              code = v.code,
                              profilePicturePath = v.profileImage
                          }).FirstOrDefault();
+            if(vCard==null)
+            {
+                vCard = null;
+            }
             return vCard;
         }
         public IEnumerable<VCardModel> GetUserVCards(int userId)
@@ -222,7 +228,8 @@ namespace SlingshotAPI.Data
                                 }).FirstOrDefault();
             return newEmailData;
         }
-        public AttechmentsModel createAttecment(int emailId, string name, string file/*Path*/)
+
+        public AttachmentsModel createAttecment(int emailId, string name, string file/*Path*/)
         {
             tblAttachment newAttechment = new tblAttachment();
             newAttechment.emailId = emailId;
@@ -234,7 +241,7 @@ namespace SlingshotAPI.Data
 
             var newAttechmentData = (from a in con.tblAttachments
                                      where a.Id == attID
-                                     select new AttechmentsModel
+                                     select new AttachmentsModel
                                      {
                                          id = a.Id,
                                          emailId = a.emailId,
@@ -243,7 +250,19 @@ namespace SlingshotAPI.Data
                                      }).FirstOrDefault();
             return newAttechmentData;
         }
-
+        public IEnumerable<AttachmentsModel> GetAttachmentByEmailId(int emailId)
+        {
+            var attechments = (from a in con.tblAttachments
+                               where a.emailId == emailId
+                               select new AttachmentsModel
+                               {
+                                   id = a.Id,
+                                   emailId = a.emailId,
+                                   name = a.name,
+                                   file = a.file
+                               }).ToList();
+            return attechments;
+        }
 
         public IEnumerable<CampaingModel> getAllCampaigns(int userId, string campName)
         {
