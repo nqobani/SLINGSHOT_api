@@ -21,7 +21,7 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
         DbConnection dbCon = new DbConnection();
         ValidationHandler _validationHandler = new ValidationHandler();
         ///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION///USER SECTION
-        public UserModel createUser(string email, string password, string type)
+        public User createUser(string email, string password, string type)
         {
             try
             {
@@ -33,9 +33,9 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
             }
 
         }
-        public IEnumerable<VCardModel> GetUserVCards(int userID)
+        public IEnumerable<SlingshotAPI.Data.Models.VCard> GetUserVCards(long userID)
         {
-            VCardModel[] _vCardModel = new VCardModel[1];
+            SlingshotAPI.Data.Models.VCard[] _vCard = new SlingshotAPI.Data.Models.VCard[1];
             if (_validationHandler.UserExist(userID))
             {
                 return dbCon.GetUserVCards(userID);
@@ -43,22 +43,36 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
             else
             {
                 /*Needs Attention*/
-                _vCardModel[0] = new VCardModel { };
-                return _vCardModel;
+                _vCard[0] = new SlingshotAPI.Data.Models.VCard { };
+                return _vCard;
+            }
+        }
+        public SlingshotAPI.Data.Models.VCard CreateVCard(long userId, string firstName, string lastName, string company, string jobTitle, string email, string webPageAddress, string twitter, string businessPhoneNumber, string mobilePhone, string country, string city, string cityCode, string imageLink)
+        {
+            Boolean userExists= _validationHandler.UserExist(userId);
+            if(userExists)
+            {
+                return dbCon.createVCard( userId, firstName, lastName, company, jobTitle, email, webPageAddress, twitter, businessPhoneNumber, mobilePhone, country, city, cityCode, imageLink);
+               // return dbCon.CreateVCard(userId, firstName, lastName, company, jobTitle, email, webPageAddress, twitter, businessPhoneNumber, mobilePhone, country, city, cityCode, imageLink);
+            }
+            else
+            {
+                return new SlingshotAPI.Data.Models.VCard { };
             }
         }
 
         ///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION///CAMPAIGN SECTION
-        public CompleteCampaign createCampaign(int creatorId, string campaignName, string thumbnail, string subject, string HTML, string attechmentsJSONString, string status = "public")
+        public CompleteCampaign createCampaign(long creatorId, string campaignName, string thumbnail, string subject, string HTML, string attechmentsJSONString, string status = "public")
         {
-            var campaign = dbCon.createCampain(creatorId, campaignName, thumbnail, status);
+            
+            var campaign = dbCon.createCampaign(creatorId, campaignName, thumbnail, subject);
 
-            int campID = campaign.id;
+            long campID = campaign.Id;
 
             dbCon.userCampaign(creatorId, campID);
 
             var email = dbCon.createEmail(campID, subject, HTML);
-            int eID = email.id;
+            long eID = email.Id;
 
             var attechmentObjs = JsonConvert.DeserializeObject<List<AttachmentUserLevelModel>>(attechmentsJSONString);
 
@@ -70,19 +84,15 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
 
                 System.IO.File.Copy(attechmentObjs[i].filePath, destinationFilePath, true);
 
-                dbCon.createAttecment(eID, attechmentObjs[i].name, attechmentObjs[i].filePath);
+                dbCon.createAttachment(eID, attechmentObjs[i].name, attechmentObjs[i].filePath);
             }
-            
-
 
             return new CompleteCampaign
             {
                 campiagn = campaign,
-                email = email,
-                attechment = dbCon.GetAttachmentByEmailId(eID)
             };
         }
-        public Boolean ShareCampaigns(int userId, int campId)
+        public Boolean ShareCampaigns(long userId, long campId)
         {
             Boolean shared = false;
             if (_validationHandler.CanUserShare(userId, campId))
@@ -94,18 +104,18 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
         }
 
 
-        public HistoryModel sendCampaign(int userId,int vcardId, int campId, string toEmail)
+        public History sendCampaign(long userId, long vcardId, long campId, string toEmail)
         {
             Boolean hasAccess = _validationHandler.UserCampaignValidation(userId, campId);
             if (hasAccess)
             {
                 string fromEmail = dbCon.GetUserEmail(userId);
-                EmailModel email = dbCon.GetEmail(campId);
+                Data.Models.Email email = dbCon.GetEmail(campId);
 
                 string subject = email.subject;
                 string html = email.html;
 
-                AttachmentsModel[] attechments= dbCon.GetAttachmentByEmailId(email.id).ToArray();
+                Data.Models.Attachment[] attechments= dbCon.GetAttachmentByEmailId(email.Id).ToArray();
 
                 SendEmail(fromEmail, toEmail, subject, vcardId, html, attechments).Wait();
 
@@ -113,21 +123,21 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
             }
             else
             {
-                return new HistoryModel { };
+                return new History { };
             }
         }
-        public IEnumerable<CampaingModel> getCampaigns(int userId, string campName)
+        public IEnumerable<Campaign> getCampaigns(long userId, string campName)
         {
             return dbCon.getAllCampaigns(userId, campName);
         }
-        public async Task SendEmail(string fromEmail, string toEmail, string subj, int vCardId, string HTML, AttachmentsModel[] emailAttechments)
+        public async Task SendEmail(string fromEmail, string toEmail, string subj, long vCardId, string HTML, Data.Models.Attachment[] emailAttechments)
         {
             string apiKey = Environment.GetEnvironmentVariable("sendgrid_api_key", EnvironmentVariableTarget.User);
             dynamic sg = new SendGridAPIClient(apiKey);
 
-            Email from = new Email(fromEmail);
+            SendGrid.Helpers.Mail.Email from = new SendGrid.Helpers.Mail.Email(fromEmail);
             string subject = subj;
-            Email to = new Email(toEmail);
+            SendGrid.Helpers.Mail.Email to = new SendGrid.Helpers.Mail.Email(toEmail);
             SendGrid.Helpers.Mail.Content content = new SendGrid.Helpers.Mail.Content("text/html", HTML);
             Mail mail = new Mail(from, subject, to, content);
 

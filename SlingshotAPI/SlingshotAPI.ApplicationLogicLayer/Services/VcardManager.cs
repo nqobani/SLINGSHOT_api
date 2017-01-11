@@ -36,7 +36,7 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
                 swWriter.Write(BuildVCard(vCard));
             }
         }
-        public static Boolean LoadVCardData(VCardModel vCardM)
+        public static Boolean LoadVCardData(SlingshotAPI.Data.Models.VCard vCardM)
         {
 
             Boolean found = false;
@@ -54,9 +54,9 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
                     City = vCardM.city,
                     Country = vCardM.country,
                     Phone = vCardM.businessPhoneNumber,
-                    Mobile = vCardM.mobilePhoneNumber,
+                    Mobile = vCardM.mobileNumber,
                     Email = vCardM.email,
-                    ImageLink = vCardM.profilePicturePath
+                    ImageLink = vCardM.profileImage
                 };
 
                 GenearateVCard(vcMyCard);

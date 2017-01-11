@@ -19,7 +19,7 @@ namespace SlingshotAPI.Controllers
     {
         UserService obj = new UserService();
         [Route("send")]
-        public HistoryModel sendCampaigns(int userId, int vcardId, int campId, string toEmail)
+        public History sendCampaigns(long userId, long vcardId, long campId, string toEmail)
         {
             return obj.sendCampaign(userId,vcardId, campId, toEmail);
         }
@@ -30,13 +30,13 @@ namespace SlingshotAPI.Controllers
             return obj.createCampaign(creatorId, campaignName, thumbnail, subject, HTML, attechmentsJSONString, status);
         }
         [Route("get")]
-        public IEnumerable<CampaingModel> getCampaigns(int userId, string name = "")
+        public IEnumerable<Campaign> getCampaigns(long userId, string name = "")
         {
             UserService obj = new UserService();
             return obj.getCampaigns(userId, name);
         }
         [Route("share")]
-        public Boolean shareCampaign(int userId, int campaignId)
+        public Boolean shareCampaign(long userId, long campaignId)
         {
             return obj.ShareCampaigns(userId, campaignId);
         }

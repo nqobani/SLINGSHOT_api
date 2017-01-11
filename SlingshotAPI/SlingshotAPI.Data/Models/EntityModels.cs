@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SlingshotAPI.Data.Models
 {
-    public class  ErrorMessage : Exception
+    public class ErrorMessage : Exception
     {
         public string message { set; get; }
         public string course { get; set; }
@@ -21,7 +21,7 @@ namespace SlingshotAPI.Data.Models
 
     public class CompleteCampaign
     {
-        public CampaingModel campiagn { get; set; }
+        public Campaign campiagn { get; set; }
         public EmailModel email { get; set; }
         public IEnumerable<AttachmentsModel> attechment { get; set; }
     }
@@ -110,7 +110,7 @@ namespace SlingshotAPI.Data.Models
         public DateTime sentDateTime { set; get; }
         public string toMail { set; get; }
     }
-    public class UserCampaign
+    public class UserCampaignMOde
     {
         public int userId { set; get; }
         public int campaignId { set; get; }

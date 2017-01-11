@@ -1,5 +1,6 @@
 ﻿using SlingshotAPI.ApplicationLogicLayer.Models;
 using SlingshotAPI.Data;
+using SlingshotAPI.Data.Entity_Framework;
 using SlingshotAPI.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -12,41 +13,34 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
 {
     public class ValidationHandler
     {
-        private DataClasses1DataContext con = new DataClasses1DataContext();
+        private ApplicationDbContext con = new ApplicationDbContext();
 
-        public Boolean UserExist(int userId)
+        public Boolean UserExist(long userId)
         {
-            var userC = (from user in con.tblUsers
-                         where user.Id == userId
-                         select new UserModel
-                         {
-                             id = user.Id,
-                             email = user.email,
-                             password = user.password
-                         }).FirstOrDefault();
+            var userC = con.tblUsers.SingleOrDefault(s => s.Id == userId);
             Boolean userExists = false;
-            if(userC.id==userId)
+            if(userC.Id==userId)
             {
                 userExists = true;
             }
             return userExists;
         }
 
-        public Boolean UserCampaignValidation(int useId, int campId)
+        public Boolean UserCampaignValidation(long useId, long campId)
         {
-            var userCamp = (from uc in con.tblUserCampaigns
-                            where uc.userId == useId && uc.campaignId == campId
-                            select new UserCampaign {
-                                userId=uc.userId,
-                                campaignId=uc.campaignId
-                            }).FirstOrDefault();
-            Boolean hasAccess = false;
+            //var userCamp = (from uc in con.tblUserCampaigns
+            //                where uc.userId == useId && uc.campaignId == campId
+            //                select new UserCampaign {
+            //                    userId=uc.userId,
+            //                    campaignId=uc.campaignId
+            //                }).FirstOrDefault();
+            //Boolean hasAccess = false;
 
-            if(userCamp.campaignId==campId && useId== userCamp.userId)
-            {
-                hasAccess = true;
-            }
-            return hasAccess;
+            //if(userCamp.campaignId==campId && useId== userCamp.userId)
+            //{
+            //    hasAccess = true;
+            //}
+            return true;
         }
         public Attechment GetAttechmentData(string filePath)
         {
@@ -66,34 +60,34 @@ namespace SlingshotAPI.ApplicationLogicLayer.Services
         }
 
 
-        public string GetUserType(int userId, int campaignId)
+        public string GetUserType(long userId, long campaignId)
         {
             string userType;
 
             var user = (from u in con.tblUsers
                        where u.Id == userId
-                       select new UserModel {
+                       select new User {
                            type=u.type
                        }).FirstOrDefault();
             userType = user.type;
             return userType;
         }
-        public Boolean IsCreator(int userId, int campaignId)
+        public Boolean IsCreator(long userId, long campaignId)
         {
             Boolean isCreator = false;
             var camp = (from c in con.tblCampaigns
                         where c.creatorId == userId && c.Id == campaignId
-                        select new CampaingModel {
+                        select new Campaign {
                             creatorId=c.creatorId,
-                            id=c.Id
+                            Id=c.Id
                         }).FirstOrDefault();
-            if(camp.id==campaignId && camp.creatorId==userId)
+            if(camp.Id==campaignId && camp.creatorId==userId)
             {
                 isCreator = true;
             }
             return isCreator;
         }
-        public Boolean CanUserShare(int userId, int campaignId)
+        public Boolean CanUserShare(long userId, long campaignId)
         {
             Boolean share = false;
             string userType = GetUserType(userId, campaignId);
